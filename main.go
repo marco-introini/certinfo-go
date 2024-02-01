@@ -11,7 +11,7 @@ import (
 func main() {
 	args := os.Args
 	if len(args) != 2 {
-		fmt.Println("You must provide exactly one argument")
+		fmt.Println("You must pass the PEM filename to check")
 		os.Exit(1)
 	}
 
@@ -25,15 +25,19 @@ func main() {
 		}
 	}
 
-	fmt.Println("File exists:", args[1])
-
 	file := args[1]
 	f, err := os.Open(file)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		os.Exit(1)
 	}
-	defer f.Close()
+
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+
+		}
+	}(f)
 
 	pemData, err := io.ReadAll(f)
 	if err != nil {
@@ -56,5 +60,6 @@ func main() {
 
 	fmt.Println("Common Name:", cert.Subject)
 	fmt.Println("Issuer:", cert.Issuer)
+	fmt.Println("Expiration:", cert.NotAfter)
 
 }
