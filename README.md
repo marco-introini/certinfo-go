@@ -22,7 +22,7 @@ go get -u github.com/marco-introini/certinfo-go
 ## Usage
 
 ```bash
-certinfo-go path/to/certificate.pem
+certinfo path/to/certificate.pem
 ```
 
 Replace `path/to/certificate.pem` with the path to your PEM-encoded certificate file.
@@ -34,7 +34,7 @@ None, for now
 ## Example
 
 ```bash
-certinfo-go /path/to/certificate.pem
+certinfo /path/to/certificate.pem
 ```
 
 ## Build from Source
