@@ -54,6 +54,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("Certificate Details:", cert)
+	fmt.Println("Common Name:", cert.Subject)
+	fmt.Println("Issuer:", cert.Issuer)
 
 }
