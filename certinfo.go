@@ -1,65 +1,42 @@
 package main
 
 import (
-	"crypto/x509"
-	"encoding/pem"
+	"flag"
 	"fmt"
-	"io"
 	"os"
 )
 
 func main() {
-	args := os.Args
-	if len(args) != 2 {
-		fmt.Println("You must pass the PEM filename to check")
+	filename := flag.String("file", "", "Path to the PEM file")
+	directory := flag.String("dir", "", "Direcory containing PEM files")
+	flag.Parse()
+
+	if len(flag.Args()) != 1 {
+		fmt.Println("Filename required")
 		os.Exit(1)
 	}
 
-	if _, err := os.Stat(args[1]); err != nil {
-		if os.IsNotExist(err) {
-			fmt.Println("File does not exist:", args[1])
-			os.Exit(1)
-		} else {
-			fmt.Println("Error checking file:", err)
+	command := flag.Args()[0]
+
+	switch command {
+	case "info":
+		switch {
+		case *filename != "":
+			fileInfo(*filename)
+		case *directory != "":
+			dirInfo(*directory)
+		default:
+			fmt.Println("Filename or directory required")
 			os.Exit(1)
 		}
-	}
-
-	file := args[1]
-	f, err := os.Open(file)
-	if err != nil {
-		fmt.Println("Error opening file:", err)
+	default:
+		fmt.Println("Unknown command:", command)
 		os.Exit(1)
 	}
 
-	defer func(f *os.File) {
-		err := f.Close()
-		if err != nil {
-
-		}
-	}(f)
-
-	pemData, err := io.ReadAll(f)
-	if err != nil {
-		fmt.Println("Error reading data from file:", err)
+	if *filename == "" {
+		fmt.Println("Filename required")
 		os.Exit(1)
 	}
-
-	// Check if the file is a valid PEM certificate.
-	block, rest := pem.Decode(pemData)
-	if len(rest) != 0 || block == nil {
-		fmt.Println("File is not a valid PEM certificate")
-		os.Exit(1)
-	}
-
-	cert, err := x509.ParseCertificate(block.Bytes)
-	if err != nil {
-		fmt.Println("File is not a valid PEM certificate:", err)
-		os.Exit(1)
-	}
-
-	fmt.Println("Common Name:", cert.Subject)
-	fmt.Println("Issuer:", cert.Issuer)
-	fmt.Println("Expiration:", cert.NotAfter)
 
 }
