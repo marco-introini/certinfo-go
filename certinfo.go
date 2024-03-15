@@ -1,4 +1,4 @@
-package main
+package certinfo
 
 import (
 	"flag"
@@ -8,7 +8,7 @@ import (
 
 func main() {
 	filename := flag.String("file", "", "Path to the PEM file")
-	directory := flag.String("dir", "", "Direcory containing PEM files")
+	directory := flag.String("dir", "", "Directory containing PEM files")
 	flag.Parse()
 
 	if len(flag.Args()) != 1 {

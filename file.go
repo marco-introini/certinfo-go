@@ -1,4 +1,4 @@
-package main
+package certinfo
 
 import (
 	"crypto/x509"
